@@ -1,0 +1,222 @@
+---
+---
+<!-- Barre du Drapeau National Malien -->
+<div class="drapeau-bar" aria-hidden="true">
+  <div class="drapeau-vert"></div>
+  <div class="drapeau-jaune"></div>
+  <div class="drapeau-rouge"></div>
+</div>
+
+<!-- Barre Gouvernementale Administrative -->
+<div class="gov-bar">
+  <div class="container gov-bar-content">
+    <div>RÉPUBLIQUE DU MALI — REGISTRE NATIONAL INTERNET</div>
+    <div class="gov-links">
+      <a href="https://agetic.gouv.ml" target="_blank" rel="noopener noreferrer" class="gov-link">AGETIC</a>
+      <span style="opacity: 0.3;">|</span>
+      <a href="https://amrtp.ml" target="_blank" rel="noopener noreferrer" class="gov-link">AMRTP</a>
+    </div>
+  </div>
+</div>
+
+<header class="main-header">
+  <div class="container header-container">
+    <a href="/" class="brand-logo" aria-label="Retour à l'accueil de Point.ml">
+      <div class="logo-text">POINT<span>.ML</span></div>
+      <div class="logo-sub">Registre National du Domaine Malien</div>
+    </a>
+
+    <!-- Hamburger Button (Mobile) -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu de navigation" aria-expanded="false" aria-controls="mainNav">
+      <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="3" y1="12" x2="21" y2="12" class="line-1"></line>
+        <line x1="3" y1="6" x2="21" y2="6" class="line-2"></line>
+        <line x1="3" y1="18" x2="21" y2="18" class="line-3"></line>
+      </svg>
+    </button>
+
+    <!-- Navigation principale -->
+    <nav class="main-nav" id="mainNav" aria-label="Menu principal">
+      <ul class="nav-list">
+        <li><a href="/" class="nav-link">Rechercher</a></li>
+        <li><a href="/#regles" class="nav-link">Tarifs & Règles</a></li>
+        <li><a href="/dashboard" class="nav-link" id="navDashboardLink" style="display: none;">Mon Dashboard</a></li>
+        <li><a href="/contact" class="nav-link">Support & Contact</a></li>
+        <li class="auth-section">
+          <!-- Dynamically toggled via script -->
+          <a href="/connexion" class="btn btn-outline btn-sm" id="headerLoginBtn">Espace Client</a>
+          <div id="headerUserMenu" style="display: none; align-items: center; gap: 12px;">
+            <span id="headerUserEmail" style="font-size: 0.85rem; font-weight: 600; color: var(--color-accent);"></span>
+            <button class="btn btn-outline btn-sm" id="headerLogoutBtn">Déconnexion</button>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .main-header {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-height);
+  }
+  .brand-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .logo-text {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+    letter-spacing: 0.05em;
+  }
+  .logo-text span {
+    color: var(--color-accent);
+  }
+  .logo-sub {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  /* Navigation */
+  .main-nav {
+    display: flex;
+    align-items: center;
+  }
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
+  }
+  .nav-link:hover {
+    color: var(--color-accent);
+    background-color: var(--color-light);
+  }
+
+  .auth-section {
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Mobile menu styles */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    .main-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: var(--color-white);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-md);
+      display: none;
+      padding: 20px 24px;
+    }
+    .main-nav.active {
+      display: block;
+    }
+    .nav-list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .auth-section {
+      margin-left: 0;
+      margin-top: 8px;
+    }
+    .auth-section #headerUserMenu {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .auth-section .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  // Mobile Hamburger Toggle
+  const toggleBtn = document.getElementById('menuToggle');
+  const mainNav = document.getElementById('mainNav');
+
+  if (toggleBtn && mainNav) {
+    toggleBtn.addEventListener('click', () => {
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', String(!isExpanded));
+      mainNav.classList.toggle('active');
+    });
+  }
+
+  // Session handler (localStorage simulation)
+  function updateHeaderAuth() {
+    const userSessionStr = localStorage.getItem('point_session');
+    const loginBtn = document.getElementById('headerLoginBtn');
+    const userMenu = document.getElementById('headerUserMenu');
+    const userEmailSpan = document.getElementById('headerUserEmail');
+    const dashboardLink = document.getElementById('navDashboardLink');
+
+    if (userSessionStr) {
+      const session = JSON.parse(userSessionStr);
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (userMenu) userMenu.style.display = 'flex';
+      if (userEmailSpan) userEmailSpan.textContent = session.email;
+      if (dashboardLink) dashboardLink.style.display = 'block';
+    } else {
+      if (loginBtn) loginBtn.style.display = 'block';
+      if (userMenu) userMenu.style.display = 'none';
+      if (dashboardLink) dashboardLink.style.display = 'none';
+    }
+  }
+
+  // Initial check
+  updateHeaderAuth();
+
+  // Handle Logout
+  const logoutBtn = document.getElementById('headerLogoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('point_session');
+      window.location.href = '/';
+    });
+  }
+
+  // Listen to local session updates
+  window.addEventListener('storage', updateHeaderAuth);
+</script>

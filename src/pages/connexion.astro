@@ -1,0 +1,200 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Espace Connexion & Inscription - Point.ml" description="Connectez-vous à votre espace client Point.ml ou créez un compte pour réserver et administrer vos noms de domaine .ml.">
+  <main id="main-content">
+    
+    <div class="page-intro">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+          <a href="/">Accueil</a> &gt; <span>Authentification</span>
+        </nav>
+        <h1>Espace Client Point.ml</h1>
+      </div>
+    </div>
+
+    <section class="section" style="background-color: var(--color-white);">
+      <div class="container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1000px; margin: 0 auto;">
+        
+        <!-- Bloc 1: Connexion -->
+        <div style="border-right: 1px solid var(--color-border); padding-right: 48px;">
+          <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: var(--color-primary-dark);">Se Connecter</h2>
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="loginEmail" class="form-label">Adresse E-mail *</label>
+              <input type="email" id="loginEmail" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="loginPassword" class="form-label">Mot de passe *</label>
+              <input type="password" id="loginPassword" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Accéder à mon espace</button>
+          </form>
+          <div id="loginError" style="display: none; margin-top: 12px; font-size: 0.9rem; color: var(--color-danger); font-weight: 600;">
+            Identifiants incorrects ou compte inexistant.
+          </div>
+        </div>
+
+        <!-- Bloc 2: Inscription -->
+        <div>
+          <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: var(--color-primary-dark);">Créer un Compte</h2>
+          <form id="signupForm">
+            <div class="form-group">
+              <label for="signupEmail" class="form-label">Adresse E-mail *</label>
+              <input type="email" id="signupEmail" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="signupPassword" class="form-label">Mot de passe *</label>
+              <input type="password" id="signupPassword" class="form-control" minlength="6" required />
+            </div>
+            <div class="form-group">
+              <label for="signupConfirm" class="form-label">Confirmer le mot de passe *</label>
+              <input type="password" id="signupConfirm" class="form-control" minlength="6" required />
+            </div>
+            <div class="form-group" style="display: flex; gap: 8px; align-items: flex-start;">
+              <input type="checkbox" id="signupAccept" style="margin-top: 4px;" required />
+              <label for="signupAccept" style="font-size: 0.85rem; color: var(--color-text-muted);">
+                J'accepte la Charte de nommage du .ml et certifie l'exactitude des informations fournies. *
+              </label>
+            </div>
+            <button type="submit" class="btn btn-secondary" style="width: 100%;">Créer mon compte client</button>
+          </form>
+          <div id="signupError" style="display: none; margin-top: 12px; font-size: 0.9rem; color: var(--color-danger); font-weight: 600;">
+            Les mots de passe ne correspondent pas ou cet e-mail est déjà utilisé.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<script>
+  // DOM Elements
+  const loginForm = document.getElementById('loginForm') as HTMLFormElement;
+  const loginEmail = document.getElementById('loginEmail') as HTMLInputElement;
+  const loginPassword = document.getElementById('loginPassword') as HTMLInputElement;
+  const loginError = document.getElementById('loginError');
+
+  const signupForm = document.getElementById('signupForm') as HTMLFormElement;
+  const signupEmail = document.getElementById('signupEmail') as HTMLInputElement;
+  const signupPassword = document.getElementById('signupPassword') as HTMLInputElement;
+  const signupConfirm = document.getElementById('signupConfirm') as HTMLInputElement;
+  const signupError = document.getElementById('signupError');
+
+  // Load registered users from simulation
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('point_users') || '[]');
+  }
+
+  // Save users to simulation
+  function saveUsers(users: any[]) {
+    localStorage.setItem('point_users', JSON.stringify(users));
+  }
+
+  // Finalize Registration if a temp domain was searched
+  function finalizeTempDomain(email: string) {
+    const tempDomainStr = localStorage.getItem('point_temp_domain');
+    if (!tempDomainStr) return;
+
+    const tempDomain = JSON.parse(tempDomainStr);
+    const users = getUsers();
+    const userIndex = users.findIndex((u: any) => u.email === email);
+
+    if (userIndex !== -1) {
+      if (!users[userIndex].domains) users[userIndex].domains = [];
+      
+      const newDomain = {
+        name: tempDomain.name,
+        registeredAt: new Date().toLocaleDateString('fr-FR'),
+        expiresAt: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString('fr-FR'),
+        price: tempDomain.price,
+        ns: ["ns1.point.ml", "ns2.point.ml"],
+        records: [
+          { type: "A", name: "@", value: "197.218.0.1", ttl: "3600" },
+          { type: "MX", name: "@", value: "10 mail.collab.gouv.ml", ttl: "3600" }
+        ],
+        redirection: { active: false, url: "" }
+      };
+
+      users[userIndex].domains.push(newDomain);
+      saveUsers(users);
+      
+      // Call SMTP simulation endpoint
+      fetch('/api/register-domain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, domainName: tempDomain.name })
+      }).catch(err => console.log("Fetch simulation error: ", err));
+    }
+
+    localStorage.removeItem('point_temp_domain');
+  }
+
+  // Login handler
+  if (loginForm && loginEmail && loginPassword && loginError) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      loginError.style.display = 'none';
+
+      const email = loginEmail.value.trim();
+      const pwd = loginPassword.value;
+      const users = getUsers();
+
+      const user = users.find((u: any) => u.email === email && u.password === pwd);
+
+      if (user) {
+        localStorage.setItem('point_session', JSON.stringify({ email: email }));
+        finalizeTempDomain(email);
+        window.location.href = '/dashboard';
+      } else {
+        loginError.style.display = 'block';
+      }
+    });
+  }
+
+  // Signup handler
+  if (signupForm && signupEmail && signupPassword && signupConfirm && signupError) {
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      signupError.style.display = 'none';
+
+      const email = signupEmail.value.trim();
+      const pwd = signupPassword.value;
+      const confirm = signupConfirm.value;
+      const users = getUsers();
+
+      // Check passwords match
+      if (pwd !== confirm) {
+        signupError.textContent = "Les mots de passe ne correspondent pas.";
+        signupError.style.display = 'block';
+        return;
+      }
+
+      // Check if email already exists
+      if (users.some((u: any) => u.email === email)) {
+        signupError.textContent = "Cette adresse e-mail est déjà utilisée.";
+        signupError.style.display = 'block';
+        return;
+      }
+
+      // Create new user
+      const newUser = {
+        email: email,
+        password: pwd,
+        domains: []
+      };
+
+      users.push(newUser);
+      saveUsers(users);
+
+      localStorage.setItem('point_session', JSON.stringify({ email: email }));
+      finalizeTempDomain(email);
+      
+      alert("Votre compte client a été créé avec succès.");
+      window.location.href = '/dashboard';
+    });
+  }
+</script>
