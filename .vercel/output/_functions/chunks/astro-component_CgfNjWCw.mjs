@@ -1,4 +1,4 @@
-import { A as AstroError, w as InvalidComponentArgs } from './entrypoint_BuI4g7My.mjs';
+import { A as AstroError, w as InvalidComponentArgs } from './entrypoint_USGmZJpa.mjs';
 
 function validateArgs(args) {
   if (args.length !== 3) return false;

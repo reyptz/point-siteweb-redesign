@@ -1,7 +1,7 @@
-import { c as createComponent } from './astro-component_BbPsvHh3.mjs';
+import { c as createComponent } from './astro-component_CgfNjWCw.mjs';
 import 'piccolore';
-import { o as renderComponent, k as renderTemplate, m as maybeRenderHead } from './entrypoint_BuI4g7My.mjs';
-import { $ as $$Layout, r as renderScript } from './Layout_DJOPlI1U.mjs';
+import { o as renderComponent, k as renderTemplate, m as maybeRenderHead } from './entrypoint_USGmZJpa.mjs';
+import { $ as $$Layout, r as renderScript } from './Layout_CtyE0HYh.mjs';
 
 const $$Index = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Recherche & Enregistrement de domaine .ml - Point.ml", "description": "Recherchez et réservez votre nom de domaine souverain en .ml gratuitement (pour 4 caractères ou plus) ou en formule premium." }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<main id="main-content"> <!-- HERO SECTION WITH SEARCH ENGINE --> <section class="hero-section" style="background-color: var(--color-primary); color: var(--color-white); padding: 80px 0; border-bottom: 4px solid var(--color-secondary);"> <div class="container" style="text-align: center; max-width: 800px; margin: 0 auto;"> <span class="badge badge-info" style="margin-bottom: 16px; background-color: rgba(255,255,255,0.15); color: var(--color-white);">Enregistrement officiel ccTLD .ML</span> <h1 style="color: var(--color-white); margin-bottom: 16px;">Trouvez votre identité numérique malienne</h1> <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-bottom: 32px;">

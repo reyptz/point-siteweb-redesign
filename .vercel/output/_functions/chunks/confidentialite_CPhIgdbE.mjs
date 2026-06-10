@@ -1,7 +1,7 @@
-import { c as createComponent } from './astro-component_BbPsvHh3.mjs';
+import { c as createComponent } from './astro-component_CgfNjWCw.mjs';
 import 'piccolore';
-import { o as renderComponent, k as renderTemplate, m as maybeRenderHead } from './entrypoint_BuI4g7My.mjs';
-import { $ as $$Layout } from './Layout_DJOPlI1U.mjs';
+import { o as renderComponent, k as renderTemplate, m as maybeRenderHead } from './entrypoint_USGmZJpa.mjs';
+import { $ as $$Layout } from './Layout_CtyE0HYh.mjs';
 
 const $$Confidentialite = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Politique de Confidentialité - Point.ml", "description": "Consultez notre politique de confidentialité des données, l'anonymisation WHOIS et la conformité à la loi malienne de protection des données." }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<main id="main-content"> <div class="page-intro"> <div class="container"> <nav class="breadcrumbs" aria-label="Fil d'Ariane"> <a href="/">Accueil</a> &gt; <span>Confidentialité</span> </nav> <h1>Politique de Confidentialité</h1> </div> </div> <section class="section" style="background-color: var(--color-white);"> <div class="container"> <div style="max-width: 800px; line-height: 1.8;"> <h2>1. Protection des données des titulaires de domaine</h2> <p style="margin-bottom: 20px;">
